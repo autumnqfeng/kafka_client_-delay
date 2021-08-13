@@ -1,8 +1,8 @@
-package com.qihu.hulk.kafka_client.consumer;
+package com.qihu.hulk.kafka_client_delay.consumer;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.qihu.hulk.kafka_client.message.Message;
+import com.qihu.hulk.kafka_client_delay.message.Message;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;

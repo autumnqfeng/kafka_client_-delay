@@ -1,8 +1,8 @@
-package com.qihu.hulk.kafka_client.producer;
+package com.qihu.hulk.kafka_client_delay.producer;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.qihu.hulk.kafka_client.message.Message;
+import com.qihu.hulk.kafka_client_delay.message.Message;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;

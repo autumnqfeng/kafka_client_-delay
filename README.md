@@ -1,7 +1,7 @@
 # kafka_client_delay
 kafka 客户端延迟测试工具
 
-启动命令：`java -jar kafka_client-0.0.1-SNAPSHOT.jar -Dspring.config.location=./application.properties` 
+启动命令：`java -jar kafka_client_delay-0.0.1-SNAPSHOT.jar -Dspring.config.location=./application.properties` 
 
 
 

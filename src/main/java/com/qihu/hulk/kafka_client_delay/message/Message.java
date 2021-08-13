@@ -1,4 +1,4 @@
-package com.qihu.hulk.kafka_client.message;
+package com.qihu.hulk.kafka_client_delay.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;

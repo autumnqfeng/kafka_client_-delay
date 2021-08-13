@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.qihu.hulk</groupId>
-    <artifactId>kafka_client</artifactId>
+    <artifactId>kafka_client_delay</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>kafka_client</name>
+    <name>kafka_client_delay</name>
     <description>kafka client test for 360 cloud</description>
     <properties>
         <java.version>1.8</java.version>
