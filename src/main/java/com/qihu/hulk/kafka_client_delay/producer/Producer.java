@@ -27,8 +27,6 @@ public class Producer {
     private String server;
     @Value("${producer.topic}")
     private String topic;
-    @Value("${producer.isAsync}")
-    private Boolean isAsync;
     @Value("${producer.msg}")
     private String msg;
     @Value("${producer.intervalMs}")
@@ -54,9 +52,9 @@ public class Producer {
         this.init();
 
         //Common Thread Pool
-        ExecutorService pool = new ThreadPoolExecutor(5, 10,
+        ExecutorService pool = new ThreadPoolExecutor(1, 1,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(1024),
+                new LinkedBlockingQueue<>(1),
                 new ThreadFactoryBuilder().setNameFormat("Producer-%d").build(),
                 new ThreadPoolExecutor.AbortPolicy());
 
@@ -71,11 +69,7 @@ public class Producer {
                     System.currentTimeMillis(),
                     "".equals(this.msg) ? "Message_" + messageNo : this.msg);
 
-            if (this.isAsync) {
-                this.producer.send(new ProducerRecord<>(this.topic, messageNo, JSON.toJSONString(message)), new ProducerCallBack(message));
-            } else {
-                syncSend(message);
-            }
+            this.producer.send(new ProducerRecord<>(this.topic, messageNo, JSON.toJSONString(message)), new ProducerCallBack(message));
             sleep();
         }
     }
@@ -84,28 +78,6 @@ public class Producer {
         try {
             Thread.sleep(this.intervalMs);
         } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void syncSend(Message message) {
-        long elapsedTime = System.currentTimeMillis() - message.getStartTime();
-        try {
-            // 同步发送, .get()阻塞方法
-            RecordMetadata metadata = this.producer.send(new ProducerRecord<>(this.topic,
-                    message.getNo(),
-                    JSON.toJSONString(message)))
-                    .get();
-
-            if (metadata != null) {
-                logger.info("message(key: {}, msg: {}) sent to partition({}), offset({}) in {} ms",
-                        message.getNo(),
-                        message.getMsg(),
-                        metadata.partition(),
-                        metadata.offset(),
-                        elapsedTime);
-            }
-        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }
@@ -129,27 +101,22 @@ class ProducerCallBack implements Callback {
     public void onCompletion(RecordMetadata metadata, Exception exception) {
         long elapsedTime = System.currentTimeMillis() - this.startTime;
 
-        if( exception!= null){
+        if(exception != null) {
             logger.error("有异常: {}", exception.toString());
 
             // todo: 在这里做一些补偿机制
 
-        }else{
-            logger.info("消息发送成功！！");
         }
 
-        if (metadata != null) {
-            logger.info("message(key: {}, msg: {}) sent to partition({}), offset({}) in {} ms",
+        if (metadata != null && this.key%5000 == 0) {
+            logger.info("message(key: {}) sent to partition({}), offset({}) in {} ms",
                     this.key,
-                    this.message,
                     metadata.partition(),
                     metadata.offset(),
                     elapsedTime);
-
-        } else {
-            assert exception != null;
-            exception.printStackTrace();
         }
     }
+
+
 
 }
